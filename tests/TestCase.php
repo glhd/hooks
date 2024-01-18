@@ -1,8 +1,8 @@
 <?php
 
-namespace Glhd\LaravelPackageTemplate\Tests;
+namespace Glhd\Hooks\Tests;
 
-use Glhd\LaravelPackageTemplate\Support\LaravelPackageTemplateServiceProvider;
+use Glhd\Hooks\Support\HooksServiceProvider;
 use Illuminate\Container\Container;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -11,7 +11,7 @@ abstract class TestCase extends Orchestra
 	protected function getPackageProviders($app)
 	{
 		return [
-			LaravelPackageTemplateServiceProvider::class,
+			HooksServiceProvider::class,
 		];
 	}
 	
