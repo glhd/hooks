@@ -3,11 +3,17 @@
 namespace Glhd\Hooks\Tests;
 
 use Glhd\Hooks\Support\HooksServiceProvider;
-use Illuminate\Container\Container;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+	protected function setUp(): void
+	{
+		require_once __DIR__.'/helpers.php';
+		
+		parent::setUp();
+	}
+	
 	protected function getPackageProviders($app)
 	{
 		return [

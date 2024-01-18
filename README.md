@@ -31,7 +31,7 @@
     </a>
 </div>
 
-# hooks
+# Hooks
 
 ## Installation
 
