@@ -2,7 +2,7 @@
 
 namespace Glhd\Hooks\Support\Facades;
 
-use Glhd\Hooks\HookRegistry;
+use Glhd\Hooks\Support\HookRegistry;
 use Illuminate\Support\Facades\Facade;
 
 class Hook extends Facade

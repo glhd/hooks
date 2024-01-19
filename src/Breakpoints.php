@@ -3,6 +3,7 @@
 namespace Glhd\Hooks;
 
 use Closure;
+use Glhd\Hooks\Support\HookRegistry;
 
 class Breakpoints
 {

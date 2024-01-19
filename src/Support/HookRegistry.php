@@ -1,7 +1,9 @@
 <?php
 
-namespace Glhd\Hooks;
+namespace Glhd\Hooks\Support;
 
+use Glhd\Hooks\Breakpoints;
+use Glhd\Hooks\Hook;
 use Illuminate\Support\Collection;
 
 class HookRegistry

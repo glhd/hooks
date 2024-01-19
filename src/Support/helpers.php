@@ -1,6 +1,6 @@
 <?php
 
-use Glhd\Hooks\HookRegistry;
+use Glhd\Hooks\Support\HookRegistry;
 
 if (!function_exists('hook')) { // @codeCoverageIgnore
 	function hook()

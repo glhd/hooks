@@ -5,7 +5,6 @@ namespace Glhd\Hooks\Support;
 use Closure;
 use Glhd\Hooks\Breakpoints;
 use Glhd\Hooks\Hook;
-use Glhd\Hooks\HookRegistry;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\Blade;

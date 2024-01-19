@@ -2,7 +2,7 @@
 
 namespace Glhd\Hooks\View\Components;
 
-use Glhd\Hooks\HookRegistry;
+use Glhd\Hooks\Support\HookRegistry;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Component;
 
