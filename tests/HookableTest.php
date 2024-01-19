@@ -3,9 +3,14 @@
 namespace Glhd\Hooks\Tests;
 
 use Glhd\Hooks\Hookable;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\HtmlString;
 
 class HookableTest extends TestCase
 {
+	use InteractsWithViews;
+	
 	public function test_breakpoints_are_fired_in_order(): void
 	{
 		$breakpoints = HookableTestObject::hook();
@@ -31,6 +36,30 @@ class HookableTest extends TestCase
 		];
 		
 		$this->assertEquals($expected, hook_log()->all());
+	}
+	
+	public function test_view_hooks_can_be_registered(): void
+	{
+		// We'll intentionally register our hooks out of order so that we
+		// know that registration order doesn't matter
+		View::hook('view-hook-2', fn() => 'Hello Skyler!');
+		View::hook('view-hook-2', view('hello', ['name' => 'Bogdan']));
+		View::hook('view-hook-1', fn() => new HtmlString('Hello Chris!'));
+		View::hook('view-hook-1', view('hello', ['name' => 'Caleb']));
+		
+		$view = $this->blade(<<<'blade'
+		<div>
+			<x-hook name="view-hook-1" />
+			<x-hook name="view-hook-2" />
+		</div>
+		blade);
+		
+		$view->assertSeeTextInOrder([
+			'Hello Chris!',
+			'Hello Caleb!',
+			'Hello Skyler!',
+			'Hello Bogdan!',
+		]);
 	}
 }
 

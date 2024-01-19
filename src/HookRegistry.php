@@ -18,13 +18,16 @@ class HookRegistry
 		$this->prioritize($target, $breakpoint);
 	}
 	
-	public function call(string $target, string $breakpoint, array $arguments)
+	public function call(string $target, string $breakpoint, array $arguments): Collection
 	{
+		$results = new Collection();
 		$registered = $this->initialize($target, $breakpoint);
 		
 		foreach ($registered as $hook) {
-			call_user_func_array($hook->callback, $arguments);
+			$results->push(call_user_func_array($hook->callback, $arguments));
 		}
+		
+		return $results;
 	}
 	
 	/** @return Collection<\Glhd\Hooks\Hook> */
