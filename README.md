@@ -85,6 +85,20 @@ $hooks->beforeWritten(fn() => Log::info('Writing session to storage'));
 Now, whenenver `MySessionClass::open` is called, a "Starting session '<session name>'" message will be logged,
 and whenever `MySessionClass::write` is called, a "Writing session to storage" message will be logged.
 
+### Hook Priority
+
+You can pass an additional `int` priority to your hooks, to account for multiple hooks
+attached to the same point. For example:
+
+```php
+$hooks->beforeOpened(fn($name) => Log::info('Registered First'), 500);
+$hooks->beforeOpened(fn($name) => Log::info('Registered Second'), 100);
+```
+
+Would cause "Registered Second" to log before "Registered First". If you don't pass a priority, the
+default of `1000` will be used. All hooks at the same priority will be executed in the order they
+were registered.
+
 ### When to use class hooks
 
 Class hooks are mostly useful for package code that needs to be extensible without
