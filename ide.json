@@ -1,0 +1,19 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "viewName",
+            "condition": [
+                {
+                    "classFqn": [
+                        "Illuminate\\Support\\Facades\\View",
+                        "Illuminate\\View\\Factory",
+                        "Illuminate\\Contracts\\View\\Factory"
+                    ],
+                    "methodNames": ["hook"],
+                    "parameters": [1]
+                }
+            ]
+        }
+    ]
+}

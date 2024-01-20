@@ -6,7 +6,8 @@ use Closure;
 use Glhd\Hooks\Breakpoints;
 use Glhd\Hooks\Hook;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
-use Illuminate\Contracts\View\View as ViewContract;
+use Glhd\Hooks\View\Observer;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\HtmlString;
@@ -24,21 +25,22 @@ class HooksServiceProvider extends PackageServiceProvider
 			->hasConfigFile();
 		
 		$this->app->singleton(HookRegistry::class);
+		$this->app->singleton(Observer::class);
 		
 		Blade::component('hook', HookComponent::class);
 	}
 	
 	public function packageBooted()
 	{
-		View::macro('hook', function(string $name, Closure|ViewContract|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY) {
-			if ($hook instanceof ViewContract) {
-				$view = $hook;
-				$hook = function(...$args) use ($view) {
-					return new HtmlString($view->with($args)->render());	
-				};
+		$this->app->make(Observer::class)->observe();
+		
+		View::macro('hook', function(string $view, string $name, Closure|Htmlable|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY) {
+			if ($hook instanceof Htmlable) {
+				$html = $hook->toHtml();
+				$hook = fn() => new HtmlString($html);
 			}
 			
-			$breakpoints = new Breakpoints(View::class, app(HookRegistry::class));
+			$breakpoints = new Breakpoints($view, app(HookRegistry::class));
 			$breakpoints->listen($name, $hook, $priority);
 		});
 	}

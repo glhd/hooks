@@ -34,6 +34,6 @@ class Breakpoints
 			$hook = new Hook($hook, $priority);
 		}
 		
-		$this->registry->registerListener($hook, $this->target, $name);
+		$this->registry->register($hook, $this->target, $name);
 	}
 }

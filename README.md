@@ -35,4 +35,40 @@
 
 ## Installation
 
+```shell
+composer require glhd/hooks
+```
+
 ## Usage
+
+The hooks package provides two types of hooks: hooking into class execution, and hooking into view rendering.
+
+### Within Classes
+
+To make a class "hook-able" you need to use the `Hookable` trait:
+
+```php
+use Glhd\Hooks\Hookable;
+
+class Session
+{
+    use Hookable;
+    
+    public function start() {
+        $this->breakpoint('start'); // Code can now hook into this point in your code
+        
+        // ...
+    }
+}
+```
+
+To use these breakpoints, you must register your hooks:
+
+```php
+$breakpoints = Session::hook();
+$breakpoints->start(fn() => Log::info('Session started'));
+```
+
+Now, whenenver `Session::start` is called, a `"Session started"` message will be logged!
+
+## Within Views

@@ -11,13 +11,15 @@ class HookRegistry
 	/** @var Collection<\Glhd\Hooks\Hook>[] */
 	protected array $hooks = [];
 	
-	public function registerListener(Hook $hook, string $target, string $breakpoint = Breakpoints::DEFAULT)
+	public function register(Hook $hook, string $target, string $breakpoint = Breakpoints::DEFAULT): static
 	{
 		$registered = $this->initialize($target, $breakpoint);
 		
 		$registered->push($hook);
 		
-		$this->prioritize($target, $breakpoint);
+		$this->sortHooksByPriority($target, $breakpoint);
+		
+		return $this;
 	}
 	
 	public function call(string $target, string $breakpoint, array $arguments): Collection
@@ -26,7 +28,11 @@ class HookRegistry
 		$registered = $this->initialize($target, $breakpoint);
 		
 		foreach ($registered as $hook) {
-			$results->push(call_user_func_array($hook->callback, $arguments));
+			$results->push($hook($arguments));
+			
+			if ($hook->should_stop_propagation) {
+				break;
+			}
 		}
 		
 		return $results;
@@ -38,10 +44,10 @@ class HookRegistry
 		return $this->hooks[$target][$breakpoint] ??= new Collection();
 	}
 	
-	protected function prioritize(string $target, string $breakpoint): void
+	protected function sortHooksByPriority(string $target, string $breakpoint): void
 	{
-		$existing = $this->hooks[$target][$breakpoint];
+		$prioritized = $this->hooks[$target][$breakpoint]->sortBy(fn(Hook $hook) => $hook->priority);
 		
-		$this->hooks[$target][$breakpoint] = $existing->sortBy(fn(Hook $hook) => $hook->priority);
+		$this->hooks[$target][$breakpoint] = $prioritized;
 	}
 }
