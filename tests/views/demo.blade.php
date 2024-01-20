@@ -3,5 +3,5 @@
 	
 	<p>This is a demo</p>
 	
-	<x-hook name="footer" />
+	<x-hook name="footer" foo="bar" />
 </div>

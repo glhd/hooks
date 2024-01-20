@@ -22,7 +22,7 @@ class Hook
 	
 	public function __invoke(array $arguments)
 	{
-		return $this->callback->call($this, ...$arguments);
+		return $this->callback->call($this, $arguments);
 	}
 	
 	protected function stopPropagation(): void

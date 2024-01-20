@@ -71,6 +71,11 @@ class HookableTest extends TestCase
 		View::hook('demo', 'footer', new HtmlString('Hello Chris!'));
 		View::hook('demo', 'footer', view('hello', ['name' => 'Caleb']));
 		
+		$passed_args = null;
+		View::hook('demo', 'footer', function($arguments) use (&$passed_args) {
+			$passed_args = $arguments;
+		});
+		
 		$view = $this->view('demo');
 		
 		$view->assertSeeTextInOrder([
@@ -80,6 +85,8 @@ class HookableTest extends TestCase
 			'Hello Chris!',
 			'Hello Caleb!',
 		]);
+		
+		$this->assertEquals(['foo' => 'bar'], $passed_args);
 	}
 }
 
