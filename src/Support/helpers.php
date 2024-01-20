@@ -2,7 +2,7 @@
 
 use Glhd\Hooks\Support\HookRegistry;
 
-if (!function_exists('hook')) { // @codeCoverageIgnore
+if (! function_exists('hook')) { // @codeCoverageIgnore
 	function hook()
 	{
 		$registry = app(HookRegistry::class);
