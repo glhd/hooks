@@ -59,7 +59,7 @@ class MySessionClass implements SessionHandlerInterface
     
     public function public open(string $path, string $name): bool
     {
-        $this->callHook('beforeOpened');
+        $this->callHook('beforeOpened', $name);
         // ...
     }
     
@@ -78,12 +78,12 @@ Now, you can hook into these points from elsewhere in your app:
 $hooks = Session::hook();
 
 // Register your custom code to execute at those points
-$hooks->beforeOpened(fn() => Log::info('Session starting'));
+$hooks->beforeOpened(fn($name) => Log::info("Starting session '$name'"));
 $hooks->beforeWritten(fn() => Log::info('Writing session to storage'));
 ```
 
-Now, whenenver `MySessionClass::open` is called, a `"Session starting"` message will be logged,
-and whenever `MySessionClass::write` is called, a `"Writing session to storage"` message will be logged.
+Now, whenenver `MySessionClass::open` is called, a "Starting session '<session name>'" message will be logged,
+and whenever `MySessionClass::write` is called, a "Writing session to storage" message will be logged.
 
 ### When to use class hooks
 
