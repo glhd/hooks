@@ -18,7 +18,6 @@ class Hook
 		public Closure $callback,
 		public int $priority,
 	) {
-		// TODO: stop propagation?
 	}
 	
 	public function __invoke(array $arguments)

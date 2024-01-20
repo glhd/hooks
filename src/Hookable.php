@@ -33,7 +33,7 @@ trait Hookable
 	 * @param ...$args
 	 * @return \Illuminate\Support\Collection
 	 */
-	protected function breakpoint(string $name, ...$args): Collection
+	protected function callHook(string $name, ...$args): Collection
 	{
 		return app(HookRegistry::class)->call(static::class, $name, $args);
 	}

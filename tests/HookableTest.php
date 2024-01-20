@@ -39,6 +39,29 @@ class HookableTest extends TestCase
 		$this->assertEquals($expected, hook_log()->all());
 	}
 	
+	public function test_hooks_can_stop_propagation(): void
+	{
+		$breakpoints = HookableTestObject::hook();
+		
+		$breakpoints->beforeFirst(fn() => hook_log('before first 1'));
+		$breakpoints->beforeFirst(function() {
+			$this->stopPropagation();
+			hook_log('before first 2');
+		});
+		$breakpoints->beforeFirst(fn() => hook_log('before first 3'));
+		
+		$obj = new HookableTestObject();
+		$obj->first();
+		
+		$expected = [
+			'before first 1',
+			'before first 2',
+			'first ran',
+		];
+		
+		$this->assertEquals($expected, hook_log()->all());
+	}
+	
 	public function test_view_hooks_can_be_registered(): void
 	{
 		// We'll intentionally register our hooks out of order so that we
@@ -66,15 +89,15 @@ class HookableTestObject
 	
 	public function first()
 	{
-		$this->breakpoint('beforeFirst');
+		$this->callHook('beforeFirst');
 		hook_log('first ran');
-		$this->breakpoint('afterFirst');
+		$this->callHook('afterFirst');
 	}
 	
 	public function second()
 	{
-		$this->breakpoint('beforeSecond');
+		$this->callHook('beforeSecond');
 		hook_log('second ran');
-		$this->breakpoint('afterSecond');
+		$this->callHook('afterSecond');
 	}
 }
