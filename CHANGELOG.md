@@ -5,10 +5,12 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+## [0.0.2] - 2024-01-21
+
 ### Changed
 
-- Renamed `Breakpoints` to `Hooks`
-- Removed unused global `hook()` helper
+-   Renamed `Breakpoints` to `Hooks`
+-   Removed unused global `hook()` helper
 
 ## [0.0.1] - 2024-01-21
 
@@ -27,7 +29,9 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 -   `Fixed` for any bug fixes. 
 -   `Security` in case of vulnerabilities.
 
-[Unreleased]: https://github.com/glhd/hooks/compare/0.0.1...HEAD
+[Unreleased]: https://github.com/glhd/hooks/compare/0.0.2...HEAD
+
+[0.0.2]: https://github.com/glhd/hooks/compare/0.0.1...0.0.2
 
 [0.0.1]: https://github.com/glhd/hooks/compare/0.0.1...0.0.1
 
