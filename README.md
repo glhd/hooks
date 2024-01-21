@@ -78,12 +78,17 @@ Now, you can hook into these points from elsewhere in your app:
 $hooks = Session::hook();
 
 // Register your custom code to execute at those points
-$hooks->beforeOpened(fn($name) => Log::info("Starting session '$name'"));
-$hooks->beforeWritten(fn() => Log::info('Writing session to storage'));
+$hooks->beforeOpened(function($name) {
+    Log::info("Starting session '$name'");
+});
+
+$hooks->beforeWritten(function() {
+    Log::info('Writing session to storage');
+});
 ```
 
-Now, whenenver `MySessionClass::open` is called, a "Starting session '<session name>'" message will be logged,
-and whenever `MySessionClass::write` is called, a "Writing session to storage" message will be logged.
+Now, whenever `MySessionClass::open` is called, a `"Starting session '<session name>'"` message will be logged,
+and whenever `MySessionClass::write` is called, a `"Writing session to storage"` message will be logged.
 
 ### Hook Priority
 
@@ -146,3 +151,40 @@ be a view (or anything that implements the `Htmlable` contract), or a closure th
 anything that Blade can render. Finally, the fourth argument is a `priority` value—the lower
 the priority, the earlier it will be rendered (if there are multiple things hooking into
 the same spot). If you do not provide a priority, it will be set the `1000` by default.
+
+### View Hook Attributes
+
+It's possible to pass component attributes to your hooks, using regular Blade syntax:
+
+```blade
+<x-hook name="status" status="Demoing hooks" />
+```
+
+Your hooks will then receive the `status` value (and any other attributes you pass):
+
+```php
+View::hook('my.view', 'status', function($attributes) {
+    assert($attributes['status'] === 'Demoing hooks');
+});
+```
+
+If you pass the hook a Laravel view, any attributes will automatically be forwarded.
+This means that you can use the `$status` variable inside your view. For example,
+given the following views:
+
+```blade
+{{-- my/view.blade.php --}}
+<x-hook name="status" status="Demoing hooks" />
+
+{{-- my/hook.blade.php --}}
+<div class="alert">
+    Your current status is '{{ $status }}'
+</div>
+```
+
+The following hook code would automatically forward the value `"Demoing hooks"` as
+the `$status` attribute in your `my.hook` view:
+
+```php
+View::hook('my.view', 'status', view('my.hook'));
+```

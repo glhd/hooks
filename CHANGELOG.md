@@ -5,6 +5,10 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Added
+
+- Initial release
+
 ## [0.0.1]
 
 # Keep a Changelog Syntax
