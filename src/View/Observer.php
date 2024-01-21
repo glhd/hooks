@@ -40,18 +40,4 @@ class Observer
 			$this->observing = $previously_observing;
 		}
 	}
-	
-	public function startObserving(): static
-	{
-		$this->observing = true;
-		
-		return $this;
-	}
-	
-	public function stopObserving(): static
-	{
-		$this->observing = false;
-		
-		return $this;
-	}
 }

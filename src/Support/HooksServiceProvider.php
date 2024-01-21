@@ -3,7 +3,7 @@
 namespace Glhd\Hooks\Support;
 
 use Closure;
-use Glhd\Hooks\Breakpoints;
+use Glhd\Hooks\Hooks;
 use Glhd\Hooks\Hook;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
 use Glhd\Hooks\View\Observer;
@@ -53,8 +53,8 @@ class HooksServiceProvider extends PackageServiceProvider
 				};
 			}
 			
-			$breakpoints = new Breakpoints($view, app(HookRegistry::class));
-			$breakpoints->listen($name, $hook, $priority);
+			$breakpoints = new Hooks($view, app(HookRegistry::class));
+			$breakpoints->on($name, $hook, $priority);
 		});
 	}
 }

@@ -5,7 +5,7 @@ namespace Glhd\Hooks;
 use Closure;
 use Glhd\Hooks\Support\HookRegistry;
 
-class Breakpoints
+class Hooks
 {
 	public const DEFAULT = '__default__';
 	
@@ -20,15 +20,15 @@ class Breakpoints
 		$hook = $arguments[0];
 		$priority = $arguments[1] ?? Hook::DEFAULT_PRIORITY;
 		
-		$this->listen($name, $hook, $priority);
+		$this->on($name, $hook, $priority);
 	}
 	
 	public function default(Closure|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY)
 	{
-		$this->listen(static::DEFAULT, $hook, $priority);
+		$this->on(static::DEFAULT, $hook, $priority);
 	}
 	
-	public function listen(string $name, Closure|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY)
+	public function on(string $name, Closure|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY)
 	{
 		if ($hook instanceof Closure) {
 			$hook = new Hook($hook, $priority);

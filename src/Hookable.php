@@ -13,11 +13,11 @@ trait Hookable
 	 *
 	 * @param \Closure|\Glhd\Hooks\Hook|null $callback Optional callback for the "default" breakpoint
 	 * @param int $priority Hook priority (lower is higher priority)
-	 * @return \Glhd\Hooks\Breakpoints
+	 * @return \Glhd\Hooks\Hooks
 	 */
-	public static function hook(Closure|Hook|null $callback = null, int $priority = Hook::DEFAULT_PRIORITY): Breakpoints
+	public static function hook(Closure|Hook|null $callback = null, int $priority = Hook::DEFAULT_PRIORITY): Hooks
 	{
-		$breakpoints = new Breakpoints(static::class, app(HookRegistry::class));
+		$breakpoints = new Hooks(static::class, app(HookRegistry::class));
 		
 		if ($callback) {
 			$breakpoints->default($callback, $priority);
@@ -36,5 +36,16 @@ trait Hookable
 	protected function callHook(string $name, ...$args): Collection
 	{
 		return app(HookRegistry::class)->call(static::class, $name, $args);
+	}
+	
+	/**
+	 * Call the "default" hook on this target
+	 * 
+	 * @param ...$args
+	 * @return \Illuminate\Support\Collection
+	 */
+	protected function callDefaultHook(...$args): Collection
+	{
+		return $this->callHook(Hooks::DEFAULT, ...$args);
 	}
 }

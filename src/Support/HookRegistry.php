@@ -2,7 +2,7 @@
 
 namespace Glhd\Hooks\Support;
 
-use Glhd\Hooks\Breakpoints;
+use Glhd\Hooks\Hooks;
 use Glhd\Hooks\Hook;
 use Illuminate\Support\Collection;
 
@@ -11,7 +11,7 @@ class HookRegistry
 	/** @var Collection<\Glhd\Hooks\Hook>[] */
 	protected array $hooks = [];
 	
-	public function register(Hook $hook, string $target, string $breakpoint = Breakpoints::DEFAULT): static
+	public function register(Hook $hook, string $target, string $breakpoint = Hooks::DEFAULT): static
 	{
 		$registered = $this->initialize($target, $breakpoint);
 		
