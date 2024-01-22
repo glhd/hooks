@@ -3,8 +3,8 @@
 namespace Glhd\Hooks\Support;
 
 use Closure;
-use Glhd\Hooks\Hooks;
 use Glhd\Hooks\Hook;
+use Glhd\Hooks\Hooks;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
 use Glhd\Hooks\View\Observer;
 use Illuminate\Contracts\Support\Htmlable;
@@ -36,8 +36,9 @@ class HooksServiceProvider extends PackageServiceProvider
 		$observer = $this->app->make(Observer::class)->observe();
 		
 		View::macro('hook', function(
-			string $view, 
-			string $name, Closure|Htmlable|Hook $hook, 
+			string $view,
+			string $name,
+			Closure|Htmlable|Hook $hook,
 			int $priority = Hook::DEFAULT_PRIORITY
 		) use ($observer) {
 			if ($hook instanceof Htmlable) {
@@ -48,7 +49,7 @@ class HooksServiceProvider extends PackageServiceProvider
 							$html->with($arguments);
 						}
 						
-						return new HtmlString($html->toHtml());	
+						return new HtmlString($html->toHtml());
 					});
 				};
 			}

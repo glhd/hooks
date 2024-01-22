@@ -37,6 +37,12 @@
     }
   },
   "scripts": {
+    "post-install-cmd": [
+      "whisky update"
+    ],
+    "post-update-cmd": [
+      "whisky update"
+    ],
     "fix-style": "vendor/bin/php-cs-fixer fix",
     "check-style": "vendor/bin/php-cs-fixer fix --diff --dry-run"
   },

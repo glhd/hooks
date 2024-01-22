@@ -40,7 +40,7 @@ trait Hookable
 	
 	/**
 	 * Call the "default" hook on this target
-	 * 
+	 *
 	 * @param ...$args
 	 * @return \Illuminate\Support\Collection
 	 */

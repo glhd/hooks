@@ -2,8 +2,8 @@
 
 namespace Glhd\Hooks\Support;
 
-use Glhd\Hooks\Hooks;
 use Glhd\Hooks\Hook;
+use Glhd\Hooks\Hooks;
 use Illuminate\Support\Collection;
 
 class HookRegistry
