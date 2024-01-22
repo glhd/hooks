@@ -35,7 +35,7 @@ class HookRegistry
 			}
 		}
 		
-		return $results;
+		return $results->filter();
 	}
 	
 	/** @return Collection<\Glhd\Hooks\Hook> */

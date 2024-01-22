@@ -15,7 +15,7 @@
   "require": {
     "php": ">=8.1",
     "illuminate/support": "^10|11.x-dev|dev-master",
-    "spatie/laravel-package-tools": "^1.16"
+    "spatie/laravel-package-tools": "^1.15"
   },
   "require-dev": {
     "orchestra/testbench": "^8|9.x-dev|10.x-dev|dev-master",

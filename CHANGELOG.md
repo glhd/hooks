@@ -5,6 +5,10 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Changed
+
+- We now filter out results that are `null`
+
 ## [0.0.3] - 2024-01-21
 
 ### Added
