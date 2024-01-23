@@ -25,14 +25,14 @@ trait Hookable
 		return $hooks;
 	}
 	
-	protected function callHook(string $name, ...$args): Results
+	protected function callHook(string $name, ...$args): Context
 	{
 		return app(HookRegistry::class)
 			->get(static::class)
 			->run($name, $args);
 	}
 	
-	protected function callDefaultHook(...$args): Results
+	protected function callDefaultHook(...$args): Context
 	{
 		return $this->callHook(Hooks::DEFAULT, ...$args);
 	}

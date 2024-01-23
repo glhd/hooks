@@ -45,25 +45,21 @@ class Hooks
 		return $this;
 	}
 	
-	public function run(string $name, array $arguments): Results
+	public function run(string $name, array $arguments): Context
 	{
 		[$arguments, $data] = $this->partition($arguments);
 		
-		$results = new Results($data);
+		$context = new Context($data);
 		
-		if (! isset($this->hooks[$name])) {
-			return $results;
-		}
-		
-		foreach ($this->hooks[$name] as $hook) {
-			$hook($arguments, $results);
+		foreach ($this->getHooks($name) as $hook) {
+			$hook($arguments, $context);
 			
-			if ($results->should_stop_propagation) {
+			if ($context->should_stop_propagation) {
 				break;
 			}
 		}
 		
-		return $results;
+		return $context;
 	}
 	
 	protected function partition(array $arguments): array
@@ -87,5 +83,11 @@ class Hooks
 		usort($this->hooks[$name], static function(Hook $a, Hook $b) {
 			return $a->priority <=> $b->priority;
 		});
+	}
+	
+	/** @return array<string, \Glhd\Hooks\Hook> */
+	protected function getHooks(string $name): array
+	{
+		return $this->hooks[$name] ?? [];
 	}
 }

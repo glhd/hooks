@@ -18,8 +18,8 @@ class Hook
 	) {
 	}
 	
-	public function __invoke(array $arguments, Results $results): Results
+	public function __invoke(array $arguments, Context $context): Context
 	{
-		return $results->addResult($this->callback->call($results, $arguments));
+		return $context->addResult($this->callback->call($context, [...$arguments, $context]));
 	}
 }

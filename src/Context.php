@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use OutOfBoundsException;
 
 /** @mixin Collection */
-class Results
+class Context
 {
 	public bool $should_stop_propagation = false;
 	
