@@ -2,8 +2,10 @@
 
 namespace Glhd\Hooks;
 
+use Illuminate\Support\Collection;
 use OutOfBoundsException;
 
+/** @mixin Collection */
 class Results
 {
 	public bool $should_stop_propagation = false;
@@ -32,6 +34,11 @@ class Results
 	public function __isset(string $name): bool
 	{
 		return isset($this->data[$name]);
+	}
+	
+	public function __call(string $name, array $arguments)
+	{
+		return Collection::make($this->results)->{$name}(...$arguments);
 	}
 	
 	public function addResult(mixed $result): static
