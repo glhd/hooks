@@ -48,7 +48,7 @@ class Context
 		return $this;
 	}
 	
-	protected function stopPropagation(): void
+	public function stopPropagation(): void
 	{
 		$this->should_stop_propagation = true;
 	}

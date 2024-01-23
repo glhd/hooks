@@ -2,6 +2,7 @@
 
 namespace Glhd\Hooks\Tests;
 
+use Glhd\Hooks\Context;
 use Glhd\Hooks\Hook;
 use Glhd\Hooks\Hookable;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
@@ -89,8 +90,8 @@ class HookableTest extends TestCase
 		$hooks = HookableTestObject::hook();
 		
 		$hooks->beforeFirst(fn() => hook_log('before first 1'));
-		$hooks->beforeFirst(function() {
-			$this->stopPropagation();
+		$hooks->beforeFirst(function(Context $context) {
+			$context->stopPropagation();
 			hook_log('before first 2');
 		});
 		$hooks->beforeFirst(fn() => hook_log('before first 3'));
@@ -107,16 +108,15 @@ class HookableTest extends TestCase
 		$this->assertEquals($expected, hook_log()->all());
 	}
 	
-	public function test_data_can_be_passed_to_and_manipulated_by_hooks(): void
+	public function test_context_can_be_passed_to_and_manipulated_by_hooks(): void
 	{
 		$obj = new HookableTestObject();
 		$obj->withData('foo');
 		
-		$test = $this;
-		
-		HookableTestObject::hook()->on('withData', function() use ($test) {
-			$test->assertEquals('bar', $this->value);
-			$this->value = 'baz';
+		HookableTestObject::hook()->on('withData', function($value, Context $context) {
+			$this->assertEquals('bar', $context->value);
+			$this->assertEquals('bar', $value);
+			$context->value = 'baz';
 			
 			return false;
 		});
@@ -124,8 +124,8 @@ class HookableTest extends TestCase
 		$obj->withData('bar');
 		
 		$expected = [
-			"got data: 'foo'",
-			"got data: 'baz'",
+			'data: foo -> foo',
+			'data: bar -> baz',
 		];
 		
 		$this->assertEquals($expected, hook_log()->all());
@@ -140,9 +140,8 @@ class HookableTest extends TestCase
 		View::hook('demo', 'footer', new HtmlString('Hello Chris!'));
 		View::hook('demo', 'footer', view('hello', ['name' => 'Caleb']));
 		
-		$test = $this;
-		View::hook('demo', 'footer', function() use ($test) {
-			$test->assertEquals('bar', $this->foo);
+		View::hook('demo', 'footer', function($context) {
+			$this->assertEquals('bar', $context->foo);
 		});
 		
 		$view = $this->view('demo');
@@ -179,8 +178,8 @@ class HookableTestObject
 	
 	public function withData(string $initial)
 	{
-		$result = $this->callHook('withData', value: $initial, continue: true);
+		$result = $this->callHook('withData', $initial, value: $initial);
 		
-		hook_log("got data: '{$result->value}'");
+		hook_log("data: {$initial} -> {$result->value}");
 	}
 }

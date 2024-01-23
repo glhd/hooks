@@ -3,6 +3,7 @@
 namespace Glhd\Hooks\Support;
 
 use Closure;
+use Glhd\Hooks\Context;
 use Glhd\Hooks\Hook;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
 use Glhd\Hooks\View\Observer;
@@ -41,10 +42,10 @@ class HooksServiceProvider extends PackageServiceProvider
 		) use ($observer) {
 			if ($hook instanceof Htmlable) {
 				$html = $hook;
-				$hook = function(array $arguments = []) use ($observer, $html) {
-					return $observer->withoutObserving(function() use ($html, $arguments) {
+				$hook = function(Context $context) use ($observer, $html) {
+					return $observer->withoutObserving(function() use ($html, $context) {
 						if ($html instanceof ViewContract) {
-							$html->with($arguments);
+							$html->with($context->data);
 						}
 						
 						return new HtmlString($html->toHtml());
