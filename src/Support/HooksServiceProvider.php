@@ -14,7 +14,6 @@ use Illuminate\Support\HtmlString;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-// See: https://twitter.com/inxilpro/status/1722261847850848616
 class HooksServiceProvider extends PackageServiceProvider
 {
 	public function configurePackage(Package $package): void

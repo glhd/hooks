@@ -5,6 +5,10 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Changed
+
+- Refactored how hooks are registered
+
 ## [0.0.4] - 2024-01-22
 
 ### Changed

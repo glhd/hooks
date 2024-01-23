@@ -15,9 +15,9 @@ class HookRegistry
 		return $this->hooks[$target] ??= new Hooks($target);
 	}
 	
-	public function register(Hook $hook, string $target, string $breakpoint = Hooks::DEFAULT): static
+	public function register(Hook $hook, string $target, string $name = Hooks::DEFAULT): static
 	{
-		$this->get($target)->on($breakpoint, $hook);
+		$this->get($target)->on($name, $hook);
 		
 		return $this;
 	}

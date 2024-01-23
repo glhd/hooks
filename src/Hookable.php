@@ -11,7 +11,7 @@ trait Hookable
 	/**
 	 * Hook into this class
 	 *
-	 * @param \Closure|\Glhd\Hooks\Hook|null $callback Optional callback for the "default" breakpoint
+	 * @param \Closure|\Glhd\Hooks\Hook|null $callback Optional callback for the "default" hook
 	 * @param int $priority Hook priority (lower is higher priority)
 	 * @return \Glhd\Hooks\Hooks
 	 */
@@ -27,7 +27,7 @@ trait Hookable
 	}
 	
 	/**
-	 * Trigger a "hook-able" breakpoint within the object
+	 * Trigger a hook within the object
 	 *
 	 * @param string $name
 	 * @param ...$args

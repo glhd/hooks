@@ -64,9 +64,9 @@ class Hooks
 		return $results->filter();
 	}
 	
-	protected function sortHooksByPriority(string $breakpoint): void
+	protected function sortHooksByPriority(string $name): void
 	{
-		usort($this->hooks[$breakpoint], static function(Hook $a, Hook $b) {
+		usort($this->hooks[$name], static function(Hook $a, Hook $b) {
 			return $a->priority <=> $b->priority;
 		});
 	}
