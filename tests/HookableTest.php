@@ -107,6 +107,30 @@ class HookableTest extends TestCase
 		$this->assertEquals($expected, hook_log()->all());
 	}
 	
+	public function test_data_can_be_passed_to_and_manipulated_by_hooks(): void
+	{
+		$obj = new HookableTestObject();
+		$obj->withData('foo');
+		
+		$test = $this;
+		
+		HookableTestObject::hook()->on('withData', function() use ($test) {
+			$test->assertEquals('bar', $this->value);
+			$this->value = 'baz';
+			
+			return false;
+		});
+		
+		$obj->withData('bar');
+		
+		$expected = [
+			"got data: 'foo'",
+			"got data: 'baz'",
+		];
+		
+		$this->assertEquals($expected, hook_log()->all());
+	}
+	
 	public function test_view_hooks_can_be_registered(): void
 	{
 		// We'll intentionally register our hooks out of order so that we
@@ -153,5 +177,12 @@ class HookableTestObject
 		$this->callHook('beforeSecond');
 		hook_log('second ran');
 		$this->callHook('afterSecond');
+	}
+	
+	public function withData(string $initial)
+	{
+		$result = $this->callHook('withData', value: $initial, continue: true);
+		
+		hook_log("got data: '{$result->value}'");
 	}
 }

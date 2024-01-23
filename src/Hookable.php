@@ -4,7 +4,6 @@ namespace Glhd\Hooks;
 
 use Closure;
 use Glhd\Hooks\Support\HookRegistry;
-use Illuminate\Support\Collection;
 
 trait Hookable
 {
@@ -26,27 +25,14 @@ trait Hookable
 		return $hooks;
 	}
 	
-	/**
-	 * Trigger a hook within the object
-	 *
-	 * @param string $name
-	 * @param ...$args
-	 * @return \Illuminate\Support\Collection
-	 */
-	protected function callHook(string $name, ...$args): Collection
+	protected function callHook(string $name, ...$args): Results
 	{
 		return app(HookRegistry::class)
 			->get(static::class)
 			->run($name, $args);
 	}
 	
-	/**
-	 * Call the "default" hook on this target
-	 *
-	 * @param ...$args
-	 * @return \Illuminate\Support\Collection
-	 */
-	protected function callDefaultHook(...$args): Collection
+	protected function callDefaultHook(...$args): Results
 	{
 		return $this->callHook(Hooks::DEFAULT, ...$args);
 	}

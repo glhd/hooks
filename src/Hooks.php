@@ -3,12 +3,12 @@
 namespace Glhd\Hooks;
 
 use Closure;
-use Illuminate\Support\Collection;
 
 class Hooks
 {
 	public const DEFAULT = '__default__';
 	
+	/** @var array<string,\Glhd\Hooks\Hook> */
 	protected array $hooks = [];
 	
 	public function __construct(
@@ -45,23 +45,41 @@ class Hooks
 		return $this;
 	}
 	
-	public function run(string $name, array $arguments): Collection
+	public function run(string $name, array $arguments): Results
 	{
-		$results = new Collection();
+		[$arguments, $data] = $this->partition($arguments);
+		
+		$results = new Results($data);
 		
 		if (! isset($this->hooks[$name])) {
 			return $results;
 		}
 		
 		foreach ($this->hooks[$name] as $hook) {
-			$results->push($hook($arguments));
+			$hook($arguments, $results);
 			
-			if ($hook->should_stop_propagation) {
+			if ($results->should_stop_propagation) {
 				break;
 			}
 		}
 		
-		return $results->filter();
+		return $results;
+	}
+	
+	protected function partition(array $arguments): array
+	{
+		$positional = [];
+		$named = [];
+		
+		foreach ($arguments as $key => $value) {
+			if (is_int($key)) {
+				$positional[] = $value;
+			} else {
+				$named[$key] = $value;
+			}
+		}
+		
+		return [$positional, $named];
 	}
 	
 	protected function sortHooksByPriority(string $name): void
