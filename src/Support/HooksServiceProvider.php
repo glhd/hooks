@@ -4,7 +4,6 @@ namespace Glhd\Hooks\Support;
 
 use Closure;
 use Glhd\Hooks\Hook;
-use Glhd\Hooks\Hooks;
 use Glhd\Hooks\View\Components\Hook as HookComponent;
 use Glhd\Hooks\View\Observer;
 use Illuminate\Contracts\Support\Htmlable;
@@ -54,8 +53,9 @@ class HooksServiceProvider extends PackageServiceProvider
 				};
 			}
 			
-			$breakpoints = new Hooks($view, app(HookRegistry::class));
-			$breakpoints->on($name, $hook, $priority);
+			app(HookRegistry::class)
+				->get($view)
+				->on($name, $hook, $priority);
 		});
 	}
 }

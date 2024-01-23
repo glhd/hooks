@@ -21,8 +21,9 @@ class Hook extends Component
 			$view = $this->observer->active_view->getName();
 			$attributes = $data['attributes']->getAttributes();
 			
-			return $this->registry->call($view, $this->name, $attributes)
-				->filter()
+			return $this->registry
+				->get($view)
+				->run($this->name, $attributes)
 				->map(fn($result) => e($result))
 				->join('');
 		};

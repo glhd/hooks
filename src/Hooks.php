@@ -3,15 +3,16 @@
 namespace Glhd\Hooks;
 
 use Closure;
-use Glhd\Hooks\Support\HookRegistry;
+use Illuminate\Support\Collection;
 
 class Hooks
 {
 	public const DEFAULT = '__default__';
 	
+	protected array $hooks = [];
+	
 	public function __construct(
 		public string $target,
-		public HookRegistry $registry,
 	) {
 	}
 	
@@ -38,8 +39,35 @@ class Hooks
 			$hook = new Hook($hook, $priority);
 		}
 		
-		$this->registry->register($hook, $this->target, $name);
+		$this->hooks[$name][] = $hook;
+		$this->sortHooksByPriority($name);
 		
 		return $this;
+	}
+	
+	public function run(string $name, array $arguments): Collection
+	{
+		$results = new Collection();
+		
+		if (! isset($this->hooks[$name])) {
+			return $results;
+		}
+		
+		foreach ($this->hooks[$name] as $hook) {
+			$results->push($hook($arguments));
+			
+			if ($hook->should_stop_propagation) {
+				break;
+			}
+		}
+		
+		return $results->filter();
+	}
+	
+	protected function sortHooksByPriority(string $breakpoint): void
+	{
+		usort($this->hooks[$breakpoint], static function(Hook $a, Hook $b) {
+			return $a->priority <=> $b->priority;
+		});
 	}
 }

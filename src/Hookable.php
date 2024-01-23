@@ -17,13 +17,13 @@ trait Hookable
 	 */
 	public static function hook(Closure|Hook|null $callback = null, int $priority = Hook::DEFAULT_PRIORITY): Hooks
 	{
-		$breakpoints = new Hooks(static::class, app(HookRegistry::class));
+		$hooks = app(HookRegistry::class)->get(static::class);
 		
 		if ($callback) {
-			$breakpoints->default($callback, $priority);
+			$hooks->default($callback, $priority);
 		}
 		
-		return $breakpoints;
+		return $hooks;
 	}
 	
 	/**
@@ -35,7 +35,9 @@ trait Hookable
 	 */
 	protected function callHook(string $name, ...$args): Collection
 	{
-		return app(HookRegistry::class)->call(static::class, $name, $args);
+		return app(HookRegistry::class)
+			->get(static::class)
+			->run($name, $args);
 	}
 	
 	/**
