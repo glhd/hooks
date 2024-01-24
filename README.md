@@ -104,6 +104,110 @@ Would cause "Registered Second" to log before "Registered First". If you don't p
 default of `1000` will be used. All hooks at the same priority will be executed in the order they
 were registered.
 
+### Stopping Propagation
+
+Hooks can halt further hooks from running with a special `stopPropagation` call (just like JavaScript).
+All hooks receive a `Context` object as the last argument. Calling `stopPropagation` on this object
+will halt any future hooks from running:
+
+```php
+use Glhd\Hooks\Context;
+
+$hooks->beforeOpened(function($name) {
+    Log::info('Lower-priority hook');
+}, 500);
+
+$hooks->beforeOpened(function($name, Context $context) {
+    Log::info('Higher-priority hook');
+    $context->stopPropagation();
+}, 100);
+```
+
+In the above case, the `'Lower-priority hook'` message will never be logged, because a higher-priority
+hook stopped propagation before it could run.
+
+### Passing data between your code and hooks
+
+There are three different ways that data gets passed in and out of hooks:
+
+1. Passing arguments *into* hooks (one-way)
+2. Returning values *from* hooks (one-way)
+3. Passing data into hooks that can be mutated by hooks (two-way)
+
+#### One-way data
+
+Options 1 and 2 are relatively simple. Any positional argument that you pass to `callHook` will
+be forwarded to the hook as-is. In our example above, the `beforeOpened` call passed `$name` to
+its hooks, and our hook accepted `$name` as its first argument.
+
+A collection of returned values from our hooks is available to the calling code. For example,
+if we wanted to allow hooks to add extra recipients to all email sent by our `Mailer` class,
+we might do something like:
+
+```php
+use Glhd\Hooks\Hookable;
+
+class Mailer
+{
+    use Hookable;
+    
+    protected function setRecipients() {
+        $recipients = $this->callHook('preparingRecipients')
+            ->filter()
+            ->append($this->to);
+            
+        $this->service->setTo($recipients);
+    }
+}
+```
+
+```php
+// Always add QA to recipient list in staging
+if (App::environment('staging')) {
+    Mailer::hook()->preparingRecipients(fn() => 'qa@myapp.com');
+}
+```
+
+It's important to note that you will **always** get a collection of results, though, even
+if there is only one hook attached to a call, because you never know how many hooks may
+be registered.
+
+#### Two-way data
+
+Sometimes you need your calling code and hooks to pass the same data in two directions. A
+common use-case for this is when you want your hooks to have the option to abort execution,
+or change some default behavior. You can do this by passing named arguments to the call,
+which will be added to the `Context` object that is passed as the last argument to your hook.
+
+For example, what if we want hooks to have the ability to *prevent* mail from sending at all?
+We might do that with something like:
+
+```php
+use Glhd\Hooks\Hookable;
+
+class Mailer
+{
+    use Hookable;
+    
+    protected function send() {
+        $result = $this->callHook('beforeSend', $this->message, shouldSend: true);
+        
+        if ($result->shouldSend) {
+            $this->service->send();
+        }
+    }
+}
+```
+
+```php
+// Never send mail to mailinator addresses
+Mailer::hook()->beforeSend(function($message, $context) {
+    if (str_contains($message->to, '@mailinator.com')) {
+        $context->shouldSend = false;
+    }
+});
+```
+
 ### When to use class hooks
 
 Class hooks are mostly useful for package code that needs to be extensible without
