@@ -52,7 +52,7 @@ class Hooks
 		$context = new Context($data);
 		
 		foreach ($this->getHooks($name) as $hook) {
-			$hook($arguments, $context);
+			$context->addResult($hook([...$arguments, $context]));
 			
 			if ($context->should_stop_propagation) {
 				break;

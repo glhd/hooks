@@ -18,8 +18,8 @@ class Hook
 	) {
 	}
 	
-	public function __invoke(array $arguments, Context $context): Context
+	public function __invoke(array $arguments): mixed
 	{
-		return $context->addResult(call_user_func_array($this->callback, [...$arguments, $context]));
+		return call_user_func_array($this->callback, $arguments);
 	}
 }
