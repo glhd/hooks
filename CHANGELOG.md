@@ -7,7 +7,8 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Changed
 
-- Refactored how hooks are registered
+- Added `Context` and moved `stopPropagation()` to it
+- Refactored how hooks are registered in the `HookRegistry`
 
 ## [0.0.4] - 2024-01-22
 
