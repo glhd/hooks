@@ -5,6 +5,11 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Added
+
+- Added support for view hooks as closures that return a view
+- Added support for explicitly setting the view name in `<x-hook>`
+
 ## [0.1.0] - 2024-01-24
 
 ### Changed

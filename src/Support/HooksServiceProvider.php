@@ -40,22 +40,29 @@ class HooksServiceProvider extends PackageServiceProvider
 			Closure|Htmlable|Hook $hook,
 			int $priority = Hook::DEFAULT_PRIORITY
 		) use ($observer) {
-			if ($hook instanceof Htmlable) {
-				$html = $hook;
-				$hook = function(Context $context) use ($observer, $html) {
-					return $observer->withoutObserving(function() use ($html, $context) {
-						if ($html instanceof ViewContract) {
-							$html->with($context->data);
+			$wrapper = function(Context $context) use ($observer, $hook) {
+				// Unwrap the hook
+				while ($hook instanceof Closure) {
+					$hook = $hook($context);
+				}
+				
+				// If it's a view, render it
+				if ($hook instanceof Htmlable) {
+					$hook = $observer->withoutObserving(function() use ($hook, $context) {
+						if ($hook instanceof ViewContract) {
+							$hook->with($context->data);
 						}
 						
-						return new HtmlString($html->toHtml());
+						return new HtmlString($hook->toHtml());
 					});
-				};
-			}
+				}
+				
+				return $hook;
+			};
 			
 			app(HookRegistry::class)
 				->get($view)
-				->on($name, $hook, $priority);
+				->on($name, $wrapper, $priority);
 		});
 	}
 }

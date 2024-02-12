@@ -137,8 +137,10 @@ class HookableTest extends TestCase
 		// know that registration order doesn't matter
 		View::hook('demo', 'header', fn() => 'Hello Skyler!', Hook::LOW_PRIORITY);
 		View::hook('demo', 'header', view('hello', ['name' => 'Bogdan']));
+		View::hook('demo', 'header', fn() => view('hello', ['name' => 'Chris']));
 		View::hook('demo', 'footer', new HtmlString('Hello Chris!'));
 		View::hook('demo', 'footer', view('hello', ['name' => 'Caleb']));
+		View::hook('demo', 'footer', fn() => view('hello', ['name' => 'Daniel']));
 		
 		View::hook('demo', 'footer', function($context) {
 			$this->assertEquals('bar', $context->foo);
@@ -148,10 +150,12 @@ class HookableTest extends TestCase
 		
 		$view->assertSeeTextInOrder([
 			'Hello Bogdan!',
+			'Hello Chris!',
 			'Hello Skyler!',
 			'This is a demo',
 			'Hello Chris!',
 			'Hello Caleb!',
+			'Hello Daniel!',
 		]);
 	}
 }

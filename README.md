@@ -241,11 +241,11 @@ Now you have two spots that you can hook into…
 // Somewhere in a `PromotionsServiceProvider` class, perhaps…
 
 if ($this->isInCyberMondayPromotionalPeriod()) {
-    View::hook('emails.receipt', 'intro', view('emails.promotions._cyber_monday_intro'));
+    View::hook('emails.receipt', 'intro', fn() => view('emails.promotions._cyber_monday_intro'));
 }
 
 if (Auth::user()->isNewRegistrant()) {
-    View::hook('emails.receipt', 'footer', view('emails.promotions._thank_you_for_first_purchase'));
+    View::hook('emails.receipt', 'footer', fn() => view('emails.promotions._thank_you_for_first_purchase'));
 }
 ```
 
@@ -255,6 +255,18 @@ be a view (or anything that implements the `Htmlable` contract), or a closure th
 anything that Blade can render. Finally, the fourth argument is a `priority` value—the lower
 the priority, the earlier it will be rendered (if there are multiple things hooking into
 the same spot). If you do not provide a priority, it will be set the `1000` by default.
+
+### Explicitly Setting View Name
+
+The `<x-hook>` Blade component can usually infer what view it's being rendered inside. 
+Depending on how your views are rendered, though, you may need to explicitly pass the view
+name to the component. You can do that by passing an additional `view` prop:
+
+```blade
+<x-hook view="emails.receipt" name="intro" />
+```
+
+This is a requirement that we hope to improve in a future release!
 
 ### View Hook Attributes
 

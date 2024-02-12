@@ -12,13 +12,14 @@ class Hook extends Component
 		public HookRegistry $registry,
 		public Observer $observer,
 		public string $name,
+		public ?string $view = null,
 	) {
 	}
 	
 	public function render()
 	{
 		return function(array $data) {
-			$view = $this->observer->active_view->getName();
+			$view = $this->view ?? $this->observer->active_view->getName();
 			$attributes = $data['attributes']->getAttributes();
 			
 			return $this->registry
