@@ -5,6 +5,10 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `HookRegistry` to be scoped rather than a singleton, so that the registry resets each request
+
 ## [0.2.0] - 2024-02-12
 
 ### Added

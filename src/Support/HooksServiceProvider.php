@@ -24,7 +24,7 @@ class HooksServiceProvider extends PackageServiceProvider
 			->setBasePath(dirname(__FILE__, 2))
 			->hasConfigFile();
 		
-		$this->app->singleton(HookRegistry::class);
+		$this->app->scoped(HookRegistry::class);
 		$this->app->singleton(Observer::class);
 		
 		Blade::component('hook', HookComponent::class);
