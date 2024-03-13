@@ -5,9 +5,11 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-03-13
+
 ### Changed
 
-- You can now pass a slot to `<x-hook />` to set the fallback content
+-   You can now pass a slot to `<x-hook />` to set the fallback content
 
 ## [0.4.0] - 2024-03-13
 
@@ -67,7 +69,9 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 -   `Fixed` for any bug fixes. 
 -   `Security` in case of vulnerabilities.
 
-[Unreleased]: https://github.com/glhd/hooks/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/glhd/hooks/compare/0.5.0...HEAD
+
+[0.5.0]: https://github.com/glhd/hooks/compare/0.4.0...0.5.0
 
 [0.4.0]: https://github.com/glhd/hooks/compare/0.3.0...0.4.0
 
