@@ -22,11 +22,13 @@ class Hook extends Component
 			$view = $this->view ?? $this->observer->active_view->getName();
 			$attributes = $data['attributes']->getAttributes();
 			
-			return $this->registry
+			$context = $this->registry
 				->get($view)
-				->run($this->name, $attributes)
-				->map(fn($result) => e($result))
-				->join('');
+				->run($this->name, $attributes);
+			
+			return $context->hasResults()
+				? $context->map(fn($result) => e($result))->join('')
+				: data_get($data, 'slot');
 		};
 	}
 }

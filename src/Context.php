@@ -48,6 +48,11 @@ class Context
 		return $this;
 	}
 	
+	public function hasResults(): bool
+	{
+		return count($this->results) > 0;
+	}
+	
 	public function stopPropagation(): void
 	{
 		$this->should_stop_propagation = true;
