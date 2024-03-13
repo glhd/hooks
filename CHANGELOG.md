@@ -5,9 +5,11 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+## [0.4.0] - 2024-03-13
+
 ### Changed
 
-- Updated `HookRegistry` to be scoped rather than a singleton, so that the registry resets each request
+-   Updated `HookRegistry` to be scoped rather than a singleton, so that the registry resets each request
 
 ## [0.3.0] - 2024-03-12
 
@@ -61,7 +63,9 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 -   `Fixed` for any bug fixes. 
 -   `Security` in case of vulnerabilities.
 
-[Unreleased]: https://github.com/glhd/hooks/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/glhd/hooks/compare/0.4.0...HEAD
+
+[0.4.0]: https://github.com/glhd/hooks/compare/0.3.0...0.4.0
 
 [0.3.0]: https://github.com/glhd/hooks/compare/0.2.0...0.3.0
 
