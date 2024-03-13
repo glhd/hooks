@@ -5,6 +5,10 @@ format. This project adheres to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [Unreleased]
 
+### Changed
+
+- You can now pass a slot to `<x-hook />` to set the fallback content
+
 ## [0.4.0] - 2024-03-13
 
 ### Changed
