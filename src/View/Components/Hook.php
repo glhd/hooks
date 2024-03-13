@@ -28,7 +28,7 @@ class Hook extends Component
 			
 			return $context->hasResults()
 				? $context->map(fn($result) => e($result))->join('')
-				: data_get($data, 'slot');
+				: e(data_get($data, 'slot'));
 		};
 	}
 }
