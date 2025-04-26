@@ -2,7 +2,9 @@
 
 namespace Glhd\Hooks;
 
+use BackedEnum;
 use Closure;
+use TypeError;
 
 class Hooks
 {
@@ -33,8 +35,16 @@ class Hooks
 		return $this;
 	}
 	
-	public function on(string $name, Closure|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY): static
+	public function on(BackedEnum|string $name, Closure|Hook $hook, int $priority = Hook::DEFAULT_PRIORITY): static
 	{
+		if ($name instanceof BackedEnum) {
+			if (! is_string($name->value)) {
+				throw new TypeError('Name must be either a string or StringBackedEnum');
+			}
+			
+			$name = $name->value;
+		}
+		
 		if ($hook instanceof Closure) {
 			$hook = new Hook($hook, $priority);
 		}

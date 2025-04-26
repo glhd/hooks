@@ -66,6 +66,33 @@ class HookableTest extends TestCase
 		
 		$this->assertEquals($expected, hook_log()->all());
 	}
+
+	public function test_hooks_can_be_registered_with_on_with_enum(): void
+	{
+		$hooks = HookableTestObject::hook();
+
+		// We'll intentionally register our hooks out of order so that we
+		// know that registration order doesn't matter
+		$hooks->on(HookTestEnum::AfterSecond, fn() => hook_log('after second ran'));
+		$hooks->on(HookTestEnum::AfterFirst, fn() => hook_log('after first ran'));
+		$hooks->on(HookTestEnum::BeforeFirst, fn() => hook_log('before first ran'));
+		$hooks->on(HookTestEnum::BeforeSecond, fn() => hook_log('before second ran'));
+
+		$obj = new HookableTestObject();
+		$obj->first();
+		$obj->second();
+
+		$expected = [
+			'before first ran',
+			'first ran',
+			'after first ran',
+			'before second ran',
+			'second ran',
+			'after second ran',
+		];
+
+		$this->assertEquals($expected, hook_log()->all());
+	}
 	
 	public function test_an_object_can_have_a_default_hook(): void
 	{
@@ -158,6 +185,14 @@ class HookableTest extends TestCase
 			'Hello Daniel!',
 		]);
 	}
+}
+
+enum HookTestEnum: string
+{
+	case BeforeFirst = 'beforeFirst';
+	case AfterFirst = 'afterFirst';
+	case BeforeSecond = 'beforeSecond';
+	case AfterSecond = 'afterSecond';
 }
 
 class HookableTestObject
