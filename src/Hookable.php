@@ -2,8 +2,10 @@
 
 namespace Glhd\Hooks;
 
+use BackedEnum;
 use Closure;
 use Glhd\Hooks\Support\HookRegistry;
+use TypeError;
 
 trait Hookable
 {
@@ -25,8 +27,16 @@ trait Hookable
 		return $hooks;
 	}
 	
-	protected function callHook(string $name, ...$args): Context
+	protected function callHook(BackedEnum|string $name, ...$args): Context
 	{
+		if ($name instanceof BackedEnum) {
+			if (! is_string($name->value)) {
+				throw new TypeError('Name must be either a string or an enum backed by a string');
+			}
+			
+			$name = $name->value;
+		}
+		
 		return app(HookRegistry::class)
 			->get(static::class)
 			->run($name, $args);
