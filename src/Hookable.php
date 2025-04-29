@@ -31,9 +31,9 @@ trait Hookable
 	{
 		if ($name instanceof BackedEnum) {
 			if (! is_string($name->value)) {
-				throw new TypeError('Name must be either a string or StringBackedEnum');
+				throw new TypeError('Name must be either a string or an enum backed by a string');
 			}
-
+			
 			$name = $name->value;
 		}
 		
