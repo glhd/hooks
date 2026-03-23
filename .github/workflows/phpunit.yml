@@ -14,9 +14,14 @@ jobs:
 
     strategy:
       matrix:
-        php: [ 8.2, 8.3, 8.4 ]
-        laravel: [ 10.*, 11.*, 12.* ]
+        php: [ 8.2, 8.3, 8.4, 8.5 ]
+        laravel: [ 13.*, 12.*, 11.*, 10.* ]
         dependency-version: [ stable, lowest ]
+        exclude:
+          - { laravel: 13.*, php: 8.2 }
+          - { laravel: 11.*, php: 8.5 }
+          - { laravel: 10.*, php: 8.5 }
+          - { laravel: 10.*, php: 8.4 }
           
     timeout-minutes: 10
 
@@ -24,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -39,7 +44,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT  
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
